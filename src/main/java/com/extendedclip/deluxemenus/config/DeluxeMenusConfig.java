@@ -668,6 +668,13 @@ public class DeluxeMenusConfig {
                 List<ItemFlag> itemFlags = new ArrayList<>();
 
                 for (String flagAsString : getStringListFromConfig(c, currentPath + "item_flags")) {
+                    // Not a Bukkit flag: an unbreakable item shows no durability bar, and its tooltip line is hidden
+                    if (flagAsString.equalsIgnoreCase("HIDE_DURABILITY")) {
+                        builder.unbreakable(true);
+                        itemFlags.add(ItemFlag.HIDE_UNBREAKABLE);
+                        continue;
+                    }
+
                     ItemFlag flag = Enums.getIfPresent(ItemFlag.class, flagAsString.toUpperCase()).orNull();
 
                     if (flag == null) {

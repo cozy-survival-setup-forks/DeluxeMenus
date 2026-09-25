@@ -19,13 +19,19 @@ public class StringUtils {
     /**
      * Translates the ampersand color codes like '&7' to their section symbol counterparts like '§7'.
      * <br>
-     * It also translates hex colors like '&#aaFF00' to their section symbol counterparts like '§x§a§a§F§F§0§0'.
+     * It also translates hex colors like '&#aaFF00' to their section symbol counterparts like '§x§a§a§F§F§0§0',
+     * and MiniMessage tags like '<gradient:red:blue>' when the text has any.
      *
      * @param input The string in which to translate the color codes.
      * @return The string with the translated colors.
      */
     @NotNull
     public static String color(@NotNull String input) {
+        // MiniMessage tags such as <gradient:red:blue> or <#ff8800> work next to the & codes
+        if (ColorParser.hasTags(input)) {
+            return ColorParser.toLegacy(input);
+        }
+
         // Hex Support for 1.16.1+
         Matcher m = HEX_PATTERN.matcher(input);
         if (VersionHelper.IS_HEX_VERSION) {
