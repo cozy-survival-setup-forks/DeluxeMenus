@@ -112,15 +112,18 @@ public class ClickActionTask extends BukkitRunnable {
                 break;
 
             case MINI_MESSAGE:
-                plugin.audiences().player(player).sendMessage(MiniMessage.miniMessage().deserialize(executable));
+                if (!NativeChat.send(player, executable)) plugin.audiences().player(player).sendMessage(MiniMessage.miniMessage().deserialize(executable));
                 break;
 
             case MINI_BROADCAST:
-                plugin.audiences().all().sendMessage(MiniMessage.miniMessage().deserialize(executable));
+                if (!NativeChat.broadcast(executable)) plugin.audiences().all().sendMessage(MiniMessage.miniMessage().deserialize(executable));
                 break;
 
             case MESSAGE:
-                player.sendMessage(StringUtils.color(executable));
+                // MiniMessage with click or hover goes out as a component, an old-style string would drop them
+                if (ColorParser.hasTags(executable)) {
+                    if (!NativeChat.send(player, ColorParser.toMiniMessage(executable))) plugin.audiences().player(player).sendMessage(ColorParser.toComponent(executable));
+                } else player.sendMessage(StringUtils.color(executable));
                 break;
 
             case ACTION_BAR:
@@ -156,7 +159,9 @@ public class ClickActionTask extends BukkitRunnable {
                 break;
 
             case BROADCAST:
-                Bukkit.broadcastMessage(StringUtils.color(executable));
+                if (ColorParser.hasTags(executable)) {
+                    if (!NativeChat.broadcast(ColorParser.toMiniMessage(executable))) plugin.audiences().all().sendMessage(ColorParser.toComponent(executable));
+                } else Bukkit.broadcastMessage(StringUtils.color(executable));
                 break;
 
             case CLOSE:

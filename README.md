@@ -5,7 +5,7 @@ A fork of [HelpChat/DeluxeMenus](https://github.com/HelpChat/DeluxeMenus) for Pa
 What is different:
 
 - **`HIDE_DURABILITY` in `item_flags`.** Hides the durability bar of an item, next to `HIDE_ATTRIBUTES`, `HIDE_ENCHANTS` and the other flags. It makes the item unbreakable (which removes the bar) and hides the unbreakable line of the tooltip. An `unbreakable` item with `HIDE_UNBREAKABLE` looks the same.
-- **MiniMessage next to the `&` codes.** Menu titles, item names, lore, `[message]` and `[broadcast]` accept MiniMessage tags (`<gradient:red:blue>`, `<#ff8800>`, `<bold>`) mixed with `&7` and `&#rrggbb`. Text without a tag that looks like MiniMessage is handled exactly as before, so old menus do not change. Hover and click events do not work in item text, use the `[minimessage]` action for them.
+- **MiniMessage next to the `&` codes.** Menu titles, item names, lore, `[message]` and `[broadcast]` accept MiniMessage tags (`<gradient:red:blue>`, `<#ff8800>`, `<bold>`) mixed with `&7` and `&#rrggbb`. Text without a tag that looks like MiniMessage is handled exactly as before, so old menus do not change. Hover and click events do not work in item text, use the `[minimessage]` action for them. `[message]` and `[broadcast]` keep click and hover events (`<click:open_url:...>`), and `[minimessage]` works on Paper 1.21.11 (it sends through the server's own Adventure).
 - **YAML anchors** (`&base` and `<<: *base`) already work in menu files, this is plain YAML and not a DeluxeMenus feature. A key that an item sets itself replaces the anchored one, lists are not merged.
 
 ```yaml

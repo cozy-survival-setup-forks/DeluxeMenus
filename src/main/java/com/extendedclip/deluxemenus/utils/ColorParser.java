@@ -1,5 +1,6 @@
 package com.extendedclip.deluxemenus.utils;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,11 @@ public final class ColorParser {
      * @return the same text with section-symbol codes, hex colours included
      */
     public static @NotNull String toLegacy(final @NotNull String input) {
+        return LEGACY.serialize(MINI.deserialize(toMiniMessage(input)));
+    }
+
+    /** The & codes turned into MiniMessage tags, so the text is all MiniMessage. */
+    public static @NotNull String toMiniMessage(final @NotNull String input) {
         String text = input.indexOf('§') >= 0 ? input.replace('§', '&') : input;
         text = HEX.matcher(text).replaceAll("<reset><#$1>");
 
@@ -61,7 +67,14 @@ public final class ColorParser {
             codes.appendReplacement(out, Matcher.quoteReplacement(NAMES[Character.toLowerCase(codes.group(1).charAt(0))]));
         }
         codes.appendTail(out);
+        return out.toString();
+    }
 
-        return LEGACY.serialize(MINI.deserialize(out.toString()));
+    /**
+     * Same input as {@link #toLegacy}, but as a component, so click and hover events survive. For messages sent
+     * to players, where an old-style string would drop them.
+     */
+    public static @NotNull Component toComponent(final @NotNull String input) {
+        return MINI.deserialize(toMiniMessage(input));
     }
 }
